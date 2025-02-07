@@ -1,3 +1,6 @@
+import time
+
+
 def test_get_assignments_teacher_1(client, h_teacher_1):
     response = client.get(
         '/teacher/assignments',
@@ -122,6 +125,7 @@ def test_grade_already_graded_assignment(client, h_teacher_1):
     data = response.json
     assert data['error'] == 'FyleError'
     
+    
 def test_grade_assignment_missing_grade(client, h_teacher_1):
     """Ensure API fails if grade is missing from request payload."""
     
@@ -134,3 +138,14 @@ def test_grade_assignment_missing_grade(client, h_teacher_1):
     assert response.status_code == 400
     data = response.json
     assert data['error'] == 'ValidationError'
+    
+    
+def test_api_performance(client, h_teacher_1):
+    """Ensure API response time is within acceptable limits."""
+    
+    start_time = time.time()
+    response = client.get('/teacher/assignments', headers=h_teacher_1)
+    end_time = time.time()
+
+    assert response.status_code == 200
+    assert (end_time - start_time) < 2  # Response should be under 2 seconds

@@ -21,12 +21,11 @@ def test_grade_assignment_draft_assignment(client, h_principal):
     response = client.post(
         '/principal/assignments/grade',
         json={
-            'id': 5,
+            'id': 3,
             'grade': GradeEnum.A.value
         },
         headers=h_principal
     )
-
     assert response.status_code == 400
 
 

@@ -1,3 +1,4 @@
+from http import HTTPStatus
 from flask import Blueprint
 from core import db
 from core.apis import decorators
@@ -23,6 +24,9 @@ def list_assignments(p):
 def upsert_assignment(p, incoming_payload):
     """Create or Edit an assignment"""
     assignment = AssignmentSchema().load(incoming_payload)
+    
+    if assignment.content == None or assignment.content == '':
+        return APIResponse.respond(data='Content is required', status_code=HTTPStatus.BAD_REQUEST)
     assignment.student_id = p.student_id
 
     upserted_assignment = Assignment.upsert(assignment)

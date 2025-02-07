@@ -78,6 +78,7 @@ class Assignment(db.Model):
         assignment = Assignment.get_by_id(_id)
         assertions.assert_found(assignment, 'No assignment with this id was found')
         assertions.assert_valid(grade is not None, 'assignment with empty grade cannot be graded')
+        assertions.assert_valid(auth_principal.teacher_id == assignment.teacher_id, 'teacher can only grade their own assignments')
 
         assignment.grade = grade
         assignment.state = AssignmentStateEnum.GRADED

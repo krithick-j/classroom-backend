@@ -86,3 +86,18 @@ def test_assignment_resubmit_error(client, h_student_1):
     assert response.status_code == 400
     assert error_response['error'] == 'FyleError'
     assert error_response["message"] == 'only a draft assignment can be submitted'
+
+
+def test_submit_nonexistent_assignment(client, h_student_1):
+    """Ensure API returns 404 if assignment does not exist."""
+    
+    response = client.post(
+        '/student/assignments/submit',
+        headers=h_student_1,
+        json={'id': 999999, 'teacher_id': 2}  # Nonexistent assignment ID
+    )
+
+    assert response.status_code == 404
+    data = response.json
+    assert data['error'] == 'FyleError'
+    assert data['message'] == 'No assignment with this id was found'

@@ -99,3 +99,12 @@ def test_grade_assignment_draft_assignment(client, h_teacher_1):
     data = response.json
 
     assert data['error'] == 'FyleError'
+
+def test_get_assignments_unauthorized(client):
+    """Ensure API returns 403 if no valid teacher token is provided."""
+    
+    response = client.get('/teacher/assignments')  # No headers sent
+    
+    assert response.status_code == 401
+    data = response.json
+    assert data['error'] == 'FyleError'

@@ -7,7 +7,7 @@ There are 5 resources:
 - Teachers
 - Assignments
 
-5 Users (1 Principal, 2 students and 2 teachers) have already been created for you in the db fixture
+5 Users (1 Principal, 2 students and 2 teachers) have been created in the db fixture
 
 - A principal can view all the teachers
 - A principal can view all the assignments submitted and/or graded by teachers.
@@ -18,28 +18,9 @@ There are 5 resources:
 - A teacher can list all assignments submitted to him
 - A teacher can grade an assignment submitted to him
 
-## Challenge
-
-Your tasks:
-
-- Add missing APIs mentioned here and get the automated tests to pass
-- Add tests for grading API
-- Please be aware that intentional bugs have been incorporated into the application, leading to test failures. Kindly address and rectify these issues as part of the assignment.
-- All tests should pass
-- Get the test coverage to 94% or above
-- There are certain SQL tests present inside `tests/SQL/`. You have to write SQL in following files:
-    - count_grade_A_assignments_by_teacher_with_max_grading.sql
-    - count_assignments_in_each_grade.sql
-- Optionally, Dockerize your application by creating a Dockerfile and a docker-compose.yml file, providing clear documentation on building and running the application with Docker, to stand out in your submission
-
-
-## Available APIs
-
 ### Auth
 - header: "X-Principal"
 - value: {"user_id":1, "student_id":1}
-
-For APIs to work you need a principal header to establish identity and context
 
 ### GET /student/assignments
 
@@ -234,11 +215,6 @@ response:
 }
 ```
 
-## Missing APIs
-
-You'll need to implement these APIs
-
-
 ### GET /principal/teachers
 
 List all the teachers
@@ -287,19 +263,6 @@ response:
     }
 }
 ```
-
-## How to Submit
-
-For submitting the assignment, please follow these steps:
-
-* Ensure that you push your code into a private repository on GitHub.
-* Add `KirtiGautam`, `kartikeyrajvaidya`, `sumanth-fyle1`, `shreyanshs7` and `satyamyesj` as collaborators to your repository with Admin access.
-* For steps to add a collaborator to your repository, refer to [this link](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-access-to-your-personal-repositories/inviting-collaborators-to-a-personal-repository).
-
-**Once you are done with your task, please use [this form](https://forms.gle/7ZBydqaoWaJTDYCA8) to complete your submission.**
-
-Once you submit the assignment, you will hear back from us within 48 hours via email.
-
 We look forward to seeing your solution!
 
 ---

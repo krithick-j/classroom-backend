@@ -101,3 +101,27 @@ def test_submit_nonexistent_assignment(client, h_student_1):
     data = response.json
     assert data['error'] == 'FyleError'
     assert data['message'] == 'No assignment with this id was found'
+    
+
+def test_submit_assignment_without_teacher(client, h_student_1):
+    """Ensure API prevents submission without a teacher_id."""
+    
+    response = client.post(
+        '/student/assignments/submit',
+        headers=h_student_1,
+        json={'id': 2}  # Missing 'teacher_id'
+    )
+
+    assert response.status_code == 400
+    data = response.json
+    assert data['error'] == 'ValidationError'
+    assert 'teacher_id' in data['message']  # Ensure proper error message
+    
+def test_get_assignments_unauthorized(client):
+    """Ensure API returns 403 when no authentication headers are provided."""
+    
+    response = client.get('/student/assignments')  # No headers
+
+    assert response.status_code == 401
+    data = response.json
+    assert data['error'] == 'FyleError'

@@ -121,3 +121,16 @@ def test_grade_already_graded_assignment(client, h_teacher_1):
     assert response.status_code == 400
     data = response.json
     assert data['error'] == 'FyleError'
+    
+def test_grade_assignment_missing_grade(client, h_teacher_1):
+    """Ensure API fails if grade is missing from request payload."""
+    
+    response = client.post(
+        '/teacher/assignments/grade',
+        headers=h_teacher_1,
+        json={"id": 1}  # Missing 'grade' field
+    )
+
+    assert response.status_code == 400
+    data = response.json
+    assert data['error'] == 'ValidationError'

@@ -108,3 +108,16 @@ def test_get_assignments_unauthorized(client):
     assert response.status_code == 401
     data = response.json
     assert data['error'] == 'FyleError'
+    
+def test_grade_already_graded_assignment(client, h_teacher_1):
+    """Ensure API prevents regrading an already graded assignment."""
+    
+    response = client.post(
+        '/teacher/assignments/grade',
+        headers=h_teacher_1,
+        json={"id": 4, "grade": "A"}
+    )
+
+    assert response.status_code == 400
+    data = response.json
+    assert data['error'] == 'FyleError'

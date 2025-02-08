@@ -1,4 +1,4 @@
-# Krithick J Classroom Backend
+# Classroom Backend - Flask
 
 This project is a backend service for a classroom management system. It provides APIs for managing users, assignments, and grading. The system supports different roles such as Principal, Teacher, and Student, each with specific permissions and capabilities.
 

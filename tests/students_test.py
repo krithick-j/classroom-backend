@@ -1,3 +1,6 @@
+def test_student_repr(student):
+    assert repr(student) == "<Student 1>"
+    
 def test_get_assignments_student_1(client, h_student_1):
     response = client.get(
         '/student/assignments',

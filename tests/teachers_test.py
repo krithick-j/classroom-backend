@@ -1,6 +1,10 @@
 import time
+from core.models.teachers import Teacher
 
 
+def test_teacher_repr(teacher):
+    assert repr(teacher) == "<Teacher 1>"
+    
 def test_get_assignments_teacher_1(client, h_teacher_1):
     response = client.get(
         '/teacher/assignments',

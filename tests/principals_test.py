@@ -1,4 +1,12 @@
 from core.models.assignments import AssignmentStateEnum, GradeEnum
+from core.models.principals import Principal
+from core import db
+from core.models.users import User
+
+
+def test_principal_repr():
+    principal = Principal(id=1)
+    assert repr(principal) == "<Principal 1>"
 
 
 def test_get_assignments(client, h_principal):

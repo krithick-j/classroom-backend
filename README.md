@@ -96,15 +96,6 @@ The project can be run using Docker. To build and run the Docker container:
 ```bash
 docker compose up -d
 ```
-
-## Contributing
-
-Contributions are welcome! Please fork the repository and submit a pull request with your changes.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
 ```
 
 This README provides a comprehensive overview of the project, including installation instructions, API documentation, and details on running tests and migrations. It also includes information on how to contribute and contact details for further inquiries.

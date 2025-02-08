@@ -1,4 +1,12 @@
 from core.models.assignments import AssignmentStateEnum, GradeEnum
+from core.models.principals import Principal
+from core import db
+from core.models.users import User
+
+
+def test_principal_repr():
+    principal = Principal(id=1)
+    assert repr(principal) == "<Principal 1>"
 
 
 def test_get_assignments(client, h_principal):
@@ -13,6 +21,20 @@ def test_get_assignments(client, h_principal):
     for assignment in data:
         assert assignment['state'] in [AssignmentStateEnum.SUBMITTED, AssignmentStateEnum.GRADED]
 
+
+def test_get_teachers(client, h_principal):
+    """
+    success case: The return type should be list
+    """
+    response = client.get(
+        '/principal/teachers',
+        headers=h_principal
+    )
+
+    assert response.status_code == 200
+
+    data = response.json['data']
+    assert isinstance(data, list)
 
 def test_grade_assignment_draft_assignment(client, h_principal):
     """

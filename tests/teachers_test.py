@@ -1,3 +1,10 @@
+import time
+from core.models.teachers import Teacher
+
+
+def test_teacher_repr(teacher):
+    assert repr(teacher) == "<Teacher 1>"
+    
 def test_get_assignments_teacher_1(client, h_teacher_1):
     response = client.get(
         '/teacher/assignments',
@@ -99,3 +106,50 @@ def test_grade_assignment_draft_assignment(client, h_teacher_1):
     data = response.json
 
     assert data['error'] == 'FyleError'
+
+def test_get_assignments_unauthorized(client):
+    """Ensure API returns 403 if no valid teacher token is provided."""
+    
+    response = client.get('/teacher/assignments')  # No headers sent
+    
+    assert response.status_code == 401
+    data = response.json
+    assert data['error'] == 'FyleError'
+    
+def test_grade_already_graded_assignment(client, h_teacher_1):
+    """Ensure API prevents regrading an already graded assignment."""
+    
+    response = client.post(
+        '/teacher/assignments/grade',
+        headers=h_teacher_1,
+        json={"id": 4, "grade": "A"}
+    )
+
+    assert response.status_code == 400
+    data = response.json
+    assert data['error'] == 'FyleError'
+    
+    
+def test_grade_assignment_missing_grade(client, h_teacher_1):
+    """Ensure API fails if grade is missing from request payload."""
+    
+    response = client.post(
+        '/teacher/assignments/grade',
+        headers=h_teacher_1,
+        json={"id": 1}  # Missing 'grade' field
+    )
+
+    assert response.status_code == 400
+    data = response.json
+    assert data['error'] == 'ValidationError'
+    
+    
+def test_api_performance(client, h_teacher_1):
+    """Ensure API response time is within acceptable limits."""
+    
+    start_time = time.time()
+    response = client.get('/teacher/assignments', headers=h_teacher_1)
+    end_time = time.time()
+
+    assert response.status_code == 200
+    assert (end_time - start_time) < 2  # Response should be under 2 seconds

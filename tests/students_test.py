@@ -1,3 +1,6 @@
+def test_student_repr(student):
+    assert repr(student) == "<Student 1>"
+    
 def test_get_assignments_student_1(client, h_student_1):
     response = client.get(
         '/student/assignments',
@@ -55,6 +58,24 @@ def test_post_assignment_student_1(client, h_student_1):
     assert data['content'] == content
     assert data['state'] == 'DRAFT'
     assert data['teacher_id'] is None
+    
+def test_edit_assignment_student_1(client, h_student_1):
+    content = 'ABCD TESTPOST'
+
+    response = client.post(
+        '/student/assignments',
+        headers=h_student_1,
+        json={
+            'id': 2,
+            'content': content
+        })
+
+    assert response.status_code == 200
+
+    data = response.json['data']
+    assert data['content'] == content
+    assert data['state'] == 'DRAFT'
+    assert data['teacher_id'] is None
 
 
 def test_submit_assignment_student_1(client, h_student_1):
@@ -86,3 +107,42 @@ def test_assignment_resubmit_error(client, h_student_1):
     assert response.status_code == 400
     assert error_response['error'] == 'FyleError'
     assert error_response["message"] == 'only a draft assignment can be submitted'
+
+
+def test_submit_nonexistent_assignment(client, h_student_1):
+    """Ensure API returns 404 if assignment does not exist."""
+    
+    response = client.post(
+        '/student/assignments/submit',
+        headers=h_student_1,
+        json={'id': 999999, 'teacher_id': 2}  # Nonexistent assignment ID
+    )
+
+    assert response.status_code == 404
+    data = response.json
+    assert data['error'] == 'FyleError'
+    assert data['message'] == 'No assignment with this id was found'
+    
+
+def test_submit_assignment_without_teacher(client, h_student_1):
+    """Ensure API prevents submission without a teacher_id."""
+    
+    response = client.post(
+        '/student/assignments/submit',
+        headers=h_student_1,
+        json={'id': 2}  # Missing 'teacher_id'
+    )
+
+    assert response.status_code == 400
+    data = response.json
+    assert data['error'] == 'ValidationError'
+    assert 'teacher_id' in data['message']  # Ensure proper error message
+    
+def test_get_assignments_unauthorized(client):
+    """Ensure API returns 403 when no authentication headers are provided."""
+    
+    response = client.get('/student/assignments')  # No headers
+
+    assert response.status_code == 401
+    data = response.json
+    assert data['error'] == 'FyleError'

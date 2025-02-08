@@ -94,7 +94,7 @@ flask db upgrade -d core/migrations/
 The project can be run using Docker. To build and run the Docker container:
 
 ```bash
-docker-compose up --build
+docker compose up -d
 ```
 
 ## Contributing
